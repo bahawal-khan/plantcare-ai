@@ -1,186 +1,81 @@
-# PlantCare AI
+# 🌱 PlantCare AI
 
-PlantCare AI is a deep learning web application that identifies plant
-diseases from a single leaf photo. Upload an image and it returns the
-predicted plant, disease, a confidence score, top-k alternatives, and a
-Grad-CAM heatmap explaining which region of the leaf drove the
-prediction.
+[![Live Demo](https://img.shields.io/badge/🌱_Live_Demo-plantcare.khanova.tech-4CAF50?style=for-the-badge)](https://plantcare.khanova.tech)
+[![API Status](https://img.shields.io/badge/⚡_API-api.khanova.tech-2196F3?style=for-the-badge)](https://api.khanova.tech/health)
+[![Backend](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Frontend](https://img.shields.io/badge/Frontend-Next.js-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![ML](https://img.shields.io/badge/Model-CNN_%2B_EfficientNet-FF6F00?style=for-the-badge&logo=tensorflow)](https://www.tensorflow.org/)
 
-Built end to end — dataset pipeline, transfer learning + fine-tuning,
-Grad-CAM explainability, a FastAPI backend, and a Next.js frontend — as a
-portfolio project demonstrating practical applied deep learning rather
-than unnecessary enterprise complexity.
+An AI-powered web app that detects plant diseases from a single leaf photo. Upload an image and get the predicted disease, a confidence score, and a Grad-CAM heatmap showing exactly which part of the leaf the model focused on — including an interactive 3D visualization.
 
-## Architecture
+---
 
-```text
-                Browser
-                   |
-                   v
-        Next.js Frontend (TypeScript)
-                   |
-              HTTPS / JSON
-                   |
-                   v
-          FastAPI ASGI Backend
-                   |
-       +-----------+------------+
-       |           |            |
-       v           v            v
-  Model Service  Disease JSON  Grad-CAM
-       |
-       v
- EfficientNetB0
-       |
-       v
- Model Artifact (ml/artifacts/stage2/best_model.keras)
-```
+## 🚀 Live Demo
 
-- **No database.** Disease information and class metadata are
-  version-controlled JSON (`data/disease_info.json`,
-  `data/class_mapping.json`) — an intentional V1 decision, not an
-  oversight. See `PROJECT_SPEC.md` §4.
-- **CPU-only inference.** No part of the stack assumes GPU availability.
-- Full rules and rationale: `ARCHITECTURE.md`, `CLAUDE.md`.
-
-## Machine learning
-
-- **Model:** EfficientNetB0, ImageNet-pretrained, transfer-learned then
-  fine-tuned in two stages — Stage 1 trains a custom classification head
-  on a frozen backbone; Stage 2 unfreezes a controlled upper portion of
-  the backbone and fine-tunes at a substantially smaller learning rate.
-  (`ML_SPEC.md`, `ml/src/models/efficientnet.py`, `ml/src/training/`)
-- **Dataset:** PlantVillage (`raw/color` subset), acquired via a pinned
-  git commit — 38 plant/disease classes across 14 plant species, split
-  70/15/15 (train/val/test) with duplicate-content grouping so no image
-  crosses a split boundary. Full provenance, license status, and
-  known limitations: `docs/DATASET.md`.
-- **Evaluation** (held-out test set, 8,147 images, untouched until final
-  evaluation — see `ml/artifacts/evaluation/`):
-
-  | Metric | Value |
-  |---|---|
-  | Accuracy | 98.78% |
-  | Macro F1 | 98.55% |
-  | Weighted F1 | 98.78% |
-
-  Per-class precision/recall/F1, the confusion matrix, and the
-  overfitting analysis are in `ml/artifacts/evaluation/`.
-- **Explainability:** Grad-CAM heatmaps (`ml/src/explainability/gradcam.py`)
-  are generated per prediction and returned as both a 2D overlay and an
-  interactive 3D visualization. Grad-CAM is an interpretability aid, not
-  proof of biological causation — this is stated in the UI, not just here.
-- **Known limitation:** PlantVillage images are lab-condition photographs
-  (uniform background, single detached leaf). Expect lower accuracy on
-  real-world field photos (clutter, variable lighting, phone artifacts)
-  than on this dataset's own test set.
-
-## Backend (FastAPI)
-
-| Endpoint | Purpose |
+| | |
 |---|---|
-| `GET /health` | Liveness + whether the model is loaded |
-| `GET /model-info` | Model name/version, input size, classes, preprocessing, evaluation metrics |
-| `POST /predict` | Multipart image upload → prediction + top-k + optional Grad-CAM |
-| `GET /diseases` | All supported disease records |
-| `GET /diseases/{disease_id}` | One disease record, or 404 |
+| 🌐 **App** | [plantcare.khanova.tech](https://plantcare.khanova.tech) |
+| ⚡ **API** | [api.khanova.tech](https://api.khanova.tech) |
 
-- The model is loaded once at FastAPI `lifespan` startup
-  (`backend/app/main.py`, `backend/app/services/model_service.py`) — never
-  per request.
-- Uploads are validated by decoded content/type and size before touching
-  the model (`backend/app/services/validation.py`).
-- CORS is restricted to configured frontend origins
-  (`BACKEND_CORS_ORIGINS`).
-- Errors are structured JSON with the right HTTP status (model
-  unavailable → 503, oversized upload → 413, invalid image → 422,
-  unknown disease → 404) — see `backend/app/core/errors.py`.
+---
 
-Full endpoint contracts: `BACKEND_SPEC.md`.
+## 📸 Screenshots
 
-## Frontend (Next.js + TypeScript)
+**Homepage**
 
-Pages: Home, Diagnose, Diagnosis Result, Disease Library, Disease Detail,
-How It Works, About — a premium AI + nature SaaS visual language shared
-across all of them (`FRONTEND_SPEC.md`, `ui-references/`).
+![Homepage](./screenshots/homepage.png)
 
-The API base URL is environment-configured
-(`NEXT_PUBLIC_API_BASE_URL`, `frontend/src/lib/site-config.ts`) — never
-hard-coded in components.
+**Diagnosis result with Grad-CAM overlay**
 
-## Project layout
+![Diagnosis Result](./screenshots/diagnosis-result.png)
 
-```text
-PlantCare-AI/
-├── ml/            # dataset pipeline, model, training, evaluation, Grad-CAM
-├── backend/        # FastAPI app (routes -> services -> ml/src inference code)
-├── frontend/        # Next.js app
-├── data/           # disease_info.json, class_mapping.json (version-controlled)
-├── docs/           # DATASET.md, SETUP.md, DEPLOYMENT.md
-├── phases/         # the 12-phase implementation plan this repo was built from
-└── tests/          # cross-cutting / dataset-pipeline tests (backend/frontend tests live alongside their app)
-```
+**Interactive 3D Grad-CAM visualization**
 
-## Local development
+![3D Visualization](./screenshots/3d-gradcam.png)
 
-```bash
-# ML environment (dataset/training/evaluation)
-python -m venv ml/.venv && ml/.venv/Scripts/activate   # Windows
-pip install -r ml/requirements.txt -r requirements-dev.txt
+---
 
-# Backend
-python -m venv backend/.venv && backend/.venv/Scripts/activate
-pip install -r ml/requirements.txt -r backend/requirements.txt -r requirements-dev.txt
-cp .env.example .env
-PYTHONPATH=. uvicorn backend.app.main:app --reload
+## 🧠 Model
 
-# Frontend
-cd frontend
-cp .env.example .env.local
-npm install
-npm run dev
-```
+- **Architecture:** Convolutional Neural Network (CNN) built on **EfficientNetB0** (ImageNet pretrained), fine-tuned via transfer learning.
+- **Dataset:** ~54,000 leaf images across multiple plant species and disease classes.
+  - Training: 38,000+ images
+  - Testing: 8,000+ images
+- **Training:** ~21 hours on CPU (no GPU used).
+- **Explainability:** Grad-CAM heatmaps highlight the exact leaf regions driving each prediction, rendered as a 2D overlay and an interactive 3D surface.
 
-Details, including dataset acquisition: `docs/SETUP.md`, `docs/DATASET.md`.
+---
 
-## Testing
+## 🛠️ Tech Stack
 
-```bash
-pytest                    # dataset pipeline + ML + backend tests
-cd frontend && npm test   # frontend unit tests
-cd frontend && npm run build   # production build check
-```
+**Backend** — FastAPI · TensorFlow/Keras · Python
+**Frontend** — Next.js · React · TypeScript · Tailwind CSS
+**Deployment** — Hostinger VPS · Nginx · Let's Encrypt SSL · PM2 · systemd
 
-Testing conventions and coverage expectations: `TESTING_SPEC.md`.
+---
 
-## Deployment
+## 🚀 Deployment
 
-The backend runs as a standard ASGI app
-(`uvicorn backend.app.main:app --host 0.0.0.0 --port 8000`); Docker
-images are provided for both the backend (`backend/Dockerfile`) and
-frontend (`frontend/Dockerfile`), orchestrated by `docker-compose.yml`.
+Deployed on a **Hostinger VPS** running Ubuntu 24.04 — Nginx as reverse proxy, SSL via Let's Encrypt (auto-renewing), FastAPI backend managed by systemd for auto-restart on crash/reboot, and Next.js frontend managed by PM2. Firewall (UFW) and Fail2ban are configured for basic server hardening.
 
-```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 docker compose up --build
-```
+---
 
-Model artifacts are git-ignored and mounted into the backend container
-as a read-only volume rather than baked into the image — see
-`docs/DEPLOYMENT.md` "Model Artifact Strategy" for why, and for the exact
-Hostinger VPS deployment commands (Docker + nginx + certbot), production
-environment variables, and cold-start behavior.
+## ⚙️ How It Works
 
-## Responsible use
+1. User uploads a leaf image
+2. FastAPI backend preprocesses the image and runs inference through the EfficientNetB0 model
+3. Model returns the predicted disease + confidence score
+4. Grad-CAM generates a heatmap showing which pixels influenced the decision
+5. Frontend displays the diagnosis with a visual explanation
 
-Predictions and Grad-CAM explanations are decision-support aids for a
-portfolio/research context, not a substitute for professional
-agricultural or plant-pathology diagnosis. See the in-app disclaimer and
-`docs/DATASET.md` "Known limitation".
+---
 
-## Specification package
+## ⚠️ Responsible Use
 
-This repository was built phase by phase from the specs in this root
-(`PROJECT_SPEC.md`, `ARCHITECTURE.md`, `ML_SPEC.md`, `BACKEND_SPEC.md`,
-`FRONTEND_SPEC.md`, `TESTING_SPEC.md`, `DEPLOYMENT_SPEC.md`) and
-`phases/PHASE_01_PROJECT_SETUP.md` through
-`phases/PHASE_12_DEPLOYMENT.md`, under the rules in `CLAUDE.md`.
+This is a portfolio/research project. Predictions and Grad-CAM explanations are decision-support aids, not a substitute for professional agricultural or plant-pathology diagnosis.
+
+---
+
+## 👤 Author
+
+Built by **Bahawal Khan**
