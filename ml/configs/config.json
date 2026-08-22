@@ -1,0 +1,43 @@
+{
+  "_comment": "Base ML configuration convention. Values here are engineering defaults/placeholders, not results from a trained model. Populated/overridden by later phases (dataset pipeline, training, fine-tuning) per ML_SPEC.md.",
+  "seed": 42,
+  "image_size": [224, 224],
+  "batch_size": 32,
+  "channels": "RGB",
+  "class_mapping_path": "data/class_mapping.json",
+  "data_dir": "data/processed",
+  "artifacts_dir": "ml/artifacts",
+  "dataset": {
+    "name": "PlantVillage",
+    "source_repo": "https://github.com/spMohanty/PlantVillage-Dataset",
+    "source_commit": "7f7ecc7e1eaca78107e3affe7cb5abd9427e139a",
+    "source_subdir": "raw/color",
+    "license": "not declared by upstream repository at pinned commit; verify redistribution terms before non-research use",
+    "acquisition_method": "git partial clone (--filter=blob:none) + cone sparse-checkout of raw/color; see ml/scripts/acquire_dataset.py",
+    "local_raw_dir": "data/raw/plantvillage/raw/color"
+  },
+  "split_ratios": {"train": 0.70, "val": 0.15, "test": 0.15},
+  "model": {
+    "_comment": "Stage 1 (Phase 03/04) and Stage 2 (Phase 05) defaults; see ml/src/models/efficientnet.py.",
+    "backbone": "EfficientNetB0",
+    "weights": "imagenet",
+    "freeze_backbone_stage1": true,
+    "dropout_rate": 0.3,
+    "dense_units": null,
+    "stage2": {
+      "_comment": "See ml/src/training/stage2.py. unfreeze_from is the name prefix of the first backbone layer to unfreeze; everything before it stays frozen.",
+      "unfreeze_from": "block6a",
+      "freeze_batchnorm": true,
+      "learning_rate": 1e-05
+    }
+  },
+  "augmentation": {
+    "_comment": "Training split only; never applied to val/test. See ml/src/preprocessing/augmentation.py.",
+    "horizontal_flip": true,
+    "rotation_deg": 15.0,
+    "zoom_range": [0.9, 1.1],
+    "translation_frac": 0.1,
+    "brightness_range": [0.9, 1.1],
+    "contrast_range": [0.9, 1.1]
+  }
+}

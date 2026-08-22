@@ -1,0 +1,40 @@
+# Applies to the backend image build (context = repo root, see
+# docker-compose.yml). Keeps the build context small -- large/irrelevant
+# directories are excluded even though backend/Dockerfile does not COPY
+# them anyway.
+
+# Python
+**/__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node / frontend (built separately by frontend/Dockerfile)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Datasets and large ML artifacts (mounted as volumes at runtime instead)
+data/raw/
+data/processed/
+ml/artifacts/
+ml/notebooks/
+
+# Docs / non-runtime material
+.git/
+.github/
+docs/
+phases/
+ui-references/
+*.md
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

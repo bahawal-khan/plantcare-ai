@@ -1,0 +1,42 @@
+# Local/VPS orchestration for the FastAPI backend + Next.js frontend
+# (Phase 12 — DEPLOYMENT_SPEC.md). See docs/DEPLOYMENT.md for the full
+# Hostinger VPS walkthrough (env vars, nginx, TLS).
+#
+# Model artifacts and data/ are git-ignored (CLAUDE.md rule 6/7) and are
+# never baked into the backend image -- they are bind-mounted read-only
+# from the host so the model can be swapped without rebuilding.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: plantcare-ai-backend:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MODEL_ARTIFACTS_DIR: ml/artifacts
+      MODEL_PATH: ml/artifacts/stage2/best_model.keras
+      CLASS_MAPPING_PATH: data/class_mapping.json
+      DISEASE_INFO_PATH: data/disease_info.json
+      EVALUATION_METRICS_PATH: ml/artifacts/evaluation/metrics.json
+    volumes:
+      - ./ml/artifacts:/app/ml/artifacts:ro
+      - ./data:/app/data:ro
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+        NEXT_PUBLIC_MAX_UPLOAD_MB: ${NEXT_PUBLIC_MAX_UPLOAD_MB:-5}
+    image: plantcare-ai-frontend:latest
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"

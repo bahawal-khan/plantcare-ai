@@ -1,0 +1,8 @@
+# Runtime dependencies for the ML pipeline (dataset processing, training,
+# evaluation, Grad-CAM). See ML_SPEC.md and CLAUDE.md rule 8: keep this
+# code independent from backend/requirements.txt.
+tensorflow>=2.16
+numpy>=1.26
+pillow>=10.0
+scikit-learn>=1.4
+matplotlib>=3.8

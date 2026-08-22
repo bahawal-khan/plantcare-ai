@@ -1,0 +1,8 @@
+# Runtime dependencies for the FastAPI backend. See BACKEND_SPEC.md.
+# Mandatory framework per CLAUDE.md: FastAPI only.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+pydantic-settings>=2.4
+python-multipart>=0.0.9
+python-dotenv>=1.0

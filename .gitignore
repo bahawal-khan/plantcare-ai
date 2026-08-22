@@ -1,0 +1,81 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+.eggs/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env.local
+.env.*.local
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Datasets (never committed; see PROJECT_SPEC.md / phases/PHASE_02) ---
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# --- ML artifacts (trained model binaries; strategy finalized in Phase 12) ---
+ml/artifacts/*
+!ml/artifacts/.gitkeep
+*.h5
+*.keras
+*.hdf5
+*.pb
+*.pt
+*.pth
+*.onnx
+*.tflite
+
+# --- OS / IDE ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Local Claude Code harness/session state ---
+.claude/
+
+# --- Logs ---
+*.log
+
+
+# --- Internal Phase Specifications ---
+phases/PHASE_01_*.md
+phases/PHASE_02_*.md
+phases/PHASE_03_*.md
+phases/PHASE_04_*.md
+phases/PHASE_05_*.md
+phases/PHASE_06_*.md
+phases/PHASE_07_*.md
+phases/PHASE_08_*.md
+phases/PHASE_09_*.md
+phases/PHASE_10_*.md
+phases/PHASE_11_*.md
+phases/PHASE_12_*.md
+
+# --- Design references ---
+ui-references/

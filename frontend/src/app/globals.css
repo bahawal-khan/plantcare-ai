@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Brand scale — botanical green, fixed across themes (used for accents, CTAs, always-dark surfaces) */
+  --color-brand-50: #f0fdf5;
+  --color-brand-100: #dcfce8;
+  --color-brand-200: #bbf7d1;
+  --color-brand-300: #86efac;
+  --color-brand-400: #4ade80;
+  --color-brand-500: #22c55e;
+  --color-brand-600: #16a34a;
+  --color-brand-700: #0f7a3a;
+  --color-brand-800: #0d5c30;
+  --color-brand-900: #0a3d21;
+  --color-ink-900: #0b1a12;
+  --color-ink-800: #10261a;
+  --color-ink-700: #16331f;
+
+  /* Semantic tokens — theme-aware, redefined under .dark below */
+  --color-surface: var(--surface);
+  --color-surface-card: var(--surface-card);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-inset: var(--surface-inset);
+  --color-text-strong: var(--text-strong);
+  --color-text-body: var(--text-body);
+  --color-text-muted: var(--text-muted);
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --surface: #f7faf8;
+  --surface-card: #ffffff;
+  --surface-muted: rgba(11, 26, 18, 0.03);
+  --surface-inset: rgba(11, 26, 18, 0.02);
+  --text-strong: #0b1a12;
+  --text-body: rgba(11, 26, 18, 0.72);
+  --text-muted: rgba(11, 26, 18, 0.52);
+  --border-default: rgba(11, 26, 18, 0.1);
+  --border-strong: rgba(11, 26, 18, 0.18);
+}
+
+:root.dark {
+  color-scheme: dark;
+  --surface: #0a1310;
+  --surface-card: #101c17;
+  --surface-muted: rgba(243, 247, 244, 0.04);
+  --surface-inset: rgba(243, 247, 244, 0.03);
+  --text-strong: #f3f7f4;
+  --text-body: rgba(243, 247, 244, 0.75);
+  --text-muted: rgba(243, 247, 244, 0.55);
+  --border-default: rgba(243, 247, 244, 0.1);
+  --border-strong: rgba(243, 247, 244, 0.18);
+}
+
+body {
+  background: var(--surface);
+  color: var(--text-strong);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@keyframes scan-sweep {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-scan-sweep {
+  animation: scan-sweep 1.8s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+/* Subtle dot-grid texture for hero/CTA sections, faded at the edges via a mask */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(11, 26, 18, 0.14) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 70% 60% at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 40%, transparent 80%);
+}
+
+:root.dark .bg-dot-grid {
+  background-image: radial-gradient(rgba(243, 247, 244, 0.12) 1px, transparent 1px);
+}
+
+.bg-dot-grid-on-dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 70% 60% at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 40%, transparent 80%);
+}
+
+/* Traveling pulse dot along workflow connecting lines */
+@keyframes travel-x {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes travel-y {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-travel-x {
+  animation: travel-x 3.6s ease-in-out infinite;
+}
+
+.animate-travel-y {
+  animation: travel-y 3.6s ease-in-out infinite;
+}
+
+/* Scroll-reveal: JS adds data-visible once the element enters the viewport */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+[data-reveal="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,45 @@
+# Example nginx reverse-proxy config for a Hostinger VPS deployment of
+# PlantCare AI (Phase 12). Copy to /etc/nginx/sites-available/plantcare-ai,
+# replace the placeholders below, then symlink into sites-enabled.
+# See docs/DEPLOYMENT.md for the full walkthrough including certbot/TLS.
+#
+# Placeholders to replace:
+#   your-domain.com      -> the domain pointed at this VPS
+#   api.your-domain.com  -> the subdomain used for the backend
+
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    listen 80;
+    server_name api.your-domain.com;
+
+    # Matches MAX_UPLOAD_SIZE_BYTES in .env (default 5 MiB) plus headroom;
+    # the backend remains the authoritative limit (DEPLOYMENT_SPEC.md).
+    client_max_body_size 6M;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # /predict can take longer than nginx's 60s default on a
+        # CPU-only host, especially on a cold model (see docs/DEPLOYMENT.md
+        # "Cold Start Behavior").
+        proxy_read_timeout 120s;
+    }
+}

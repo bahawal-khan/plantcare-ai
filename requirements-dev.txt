@@ -1,0 +1,5 @@
+# Shared development/test tooling used across ml/ and backend/.
+# Component-specific runtime dependencies live in ml/requirements.txt and
+# backend/requirements.txt respectively.
+pytest>=8.0
+httpx>=0.27
