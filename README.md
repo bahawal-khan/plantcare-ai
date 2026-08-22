@@ -23,15 +23,18 @@ An AI-powered web app that detects plant diseases from a single leaf photo. Uplo
 
 **Homepage**
 
-![Homepage](./screenshots/homepage.png)
+<img width="1355" height="642" alt="image" src="https://github.com/user-attachments/assets/682770ae-d54f-4eda-83ab-24c0a1d8fa4e" />
+
 
 **Diagnosis result with Grad-CAM overlay**
 
-![Diagnosis Result](./screenshots/diagnosis-result.png)
+<img width="1350" height="626" alt="image" src="https://github.com/user-attachments/assets/caf73928-bbb0-4d25-8954-89a3a45bc187" />
+
 
 **Interactive 3D Grad-CAM visualization**
 
-![3D Visualization](./screenshots/3d-gradcam.png)
+<img width="1243" height="515" alt="image" src="https://github.com/user-attachments/assets/e934d7fc-67ae-4200-9b93-1b414f892d8e" />
+
 
 ---
 
