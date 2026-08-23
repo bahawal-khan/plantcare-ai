@@ -36,10 +36,11 @@ export function GradCam2D({
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-text-strong">{active.label}</p>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <p className="min-w-0 flex-1 truncate text-sm font-semibold text-text-strong">{active.label}</p>
         <SegmentedTabs
           ariaLabel="Grad-CAM view"
+          className="shrink-0"
           tabs={[
             { value: "original", label: "Original" },
             { value: "heatmap", label: "Heatmap" },

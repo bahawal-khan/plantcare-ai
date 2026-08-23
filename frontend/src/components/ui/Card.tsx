@@ -16,7 +16,10 @@ export function Card({
   ...props
 }: HTMLAttributes<HTMLDivElement> & { children: ReactNode; variant?: Variant }) {
   return (
-    <div className={`rounded-2xl ${variantClasses[variant]} ${className}`} {...props}>
+    <div
+      className={`rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:border-brand-600/30 hover:shadow-lg hover:shadow-black/10 ${variantClasses[variant]} ${className}`}
+      {...props}
+    >
       {children}
     </div>
   );

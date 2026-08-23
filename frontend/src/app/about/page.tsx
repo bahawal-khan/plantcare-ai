@@ -107,32 +107,40 @@ export default async function AboutPage() {
       </div>
 
       <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {catalog ? (
-          <AnimatedStatTile icon={<LeafIcon />} value={catalog.plantCount} kind="plus" label="Plants Supported" />
-        ) : (
-          <StatTile icon={<LeafIcon />} value="—" label="Plants Supported" />
-        )}
-        {catalog ? (
-          <AnimatedStatTile
-            icon={<ShieldIcon />}
-            value={catalog.diseaseClassCount}
-            kind="plus"
-            label="Diseases Detected"
-          />
-        ) : (
-          <StatTile icon={<ShieldIcon />} value="—" label="Diseases Detected" />
-        )}
-        {modelInfo?.evaluation_accuracy != null ? (
-          <AnimatedStatTile
-            icon={<GaugeIcon />}
-            value={modelInfo.evaluation_accuracy * 100}
-            kind="percent"
-            label="Evaluation Accuracy"
-          />
-        ) : (
-          <StatTile icon={<GaugeIcon />} value="—" label="Evaluation Accuracy" />
-        )}
-        <StatTile icon={<CpuIcon />} value={modelInfo?.model_name ?? "—"} label="Model Architecture" />
+        <Reveal delay={0} className="min-w-0">
+          {catalog ? (
+            <AnimatedStatTile icon={<LeafIcon />} value={catalog.plantCount} kind="plus" label="Plants Supported" />
+          ) : (
+            <StatTile icon={<LeafIcon />} value="—" label="Plants Supported" />
+          )}
+        </Reveal>
+        <Reveal delay={80} className="min-w-0">
+          {catalog ? (
+            <AnimatedStatTile
+              icon={<ShieldIcon />}
+              value={catalog.diseaseClassCount}
+              kind="plus"
+              label="Diseases Detected"
+            />
+          ) : (
+            <StatTile icon={<ShieldIcon />} value="—" label="Diseases Detected" />
+          )}
+        </Reveal>
+        <Reveal delay={160} className="min-w-0">
+          {modelInfo?.evaluation_accuracy != null ? (
+            <AnimatedStatTile
+              icon={<GaugeIcon />}
+              value={modelInfo.evaluation_accuracy * 100}
+              kind="percent"
+              label="Evaluation Accuracy"
+            />
+          ) : (
+            <StatTile icon={<GaugeIcon />} value="—" label="Evaluation Accuracy" />
+          )}
+        </Reveal>
+        <Reveal delay={240} className="min-w-0">
+          <StatTile icon={<CpuIcon />} value={modelInfo?.model_name ?? "—"} label="Model Architecture" />
+        </Reveal>
       </div>
       {!modelInfo && (
         <p className="mt-4 text-center text-xs text-text-muted">

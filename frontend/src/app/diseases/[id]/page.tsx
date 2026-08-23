@@ -103,8 +103,10 @@ export default async function DiseaseDetailPage(props: PageProps<"/diseases/[id]
           <Reveal className="mt-14">
             <h2 className="text-lg font-bold text-text-strong">Related {disease.plant} Diseases</h2>
             <div className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {related.map((d) => (
-                <DiseaseCard key={d.id} disease={d} />
+              {related.map((d, i) => (
+                <Reveal key={d.id} delay={i * 60}>
+                  <DiseaseCard disease={d} />
+                </Reveal>
               ))}
             </div>
           </Reveal>

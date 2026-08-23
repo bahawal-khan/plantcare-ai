@@ -121,7 +121,7 @@ export function ResultPanel({
         <div className="mt-6">
           {result.gradcam ? (
             <>
-              <Card variant="elevated" className="mx-auto max-w-sm p-4 sm:max-w-md">
+              <Card variant="elevated" className="mx-auto max-w-sm overflow-hidden p-4 sm:max-w-md">
                 <GradCam2D
                   originalUrl={previewUrl}
                   heatmapBase64={result.gradcam.heatmap_png_base64}
