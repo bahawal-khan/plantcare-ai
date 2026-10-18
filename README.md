@@ -7,16 +7,6 @@
 [![ML](https://img.shields.io/badge/Model-CNN_%2B_EfficientNet-FF6F00?style=for-the-badge&logo=tensorflow)](https://www.tensorflow.org/)
 
 An AI-powered web app that detects plant diseases from a single leaf photo. Upload an image and get the predicted disease, a confidence score, and a Grad-CAM heatmap showing exactly which part of the leaf the model focused on — including an interactive 3D visualization.
-
----
-
-## 🚀 Live Demo
-
-| | |
-|---|---|
-| 🌐 **App** | [plantcare.khanova.tech](https://plantcare.khanova.tech) |
-| ⚡ **API** | [api.khanova.tech](https://api.khanova.tech) |
-
 ---
 
 ## 📸 Screenshots
